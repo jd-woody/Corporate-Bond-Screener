@@ -8,6 +8,7 @@ import analytics
 import context
 import theme as T
 from filters import render_sidebar
+from js_widgets import render_curve_scatter
 from profile_tab import render_profile_tab
 from regression_tab import render_regression_tab
 from rv_tab import render_rv_tab
@@ -24,6 +25,7 @@ SEN={"SR SECURED":1,"SECURED":1,"1ST LIEN":1,"2ND LIEN":2,"COMPANY GUARNT":3,"SR
 
 def load_one(file, universe):
     p=ROOT/'data'/file
+    if not p.exists(): p=ROOT/'data'/'sample'/file
     if not p.exists(): return pd.DataFrame()
     x=pd.read_csv(p,dtype=str,keep_default_na=False).rename(columns={'Issuer':'Name','YTM':'YTM','YTM (%)':'YTM','Coupon (%)':'Coupon','Outstanding Amount mm':'Outstanding Amount','Outstanding Amount (mm)':'Outstanding Amount','Outstanding Amount ($mm)':'Outstanding Amount'})
     for c in ['Coupon','Ask Price','YTM','Years to Maturity','Outstanding Amount','Issued Amount mm']:
@@ -60,6 +62,8 @@ if page=='Clean Screener':
     st.caption('Active filters: '+('; '.join(ACTIVE) if ACTIVE else 'none'))
     cols=[z for z in ['Universe','Name','Ticker','Sector','Industry','Rating','Collateral Type','Maturity Type','Coupon','Ask Price','YTM','G-Spread (bp)','Maturity','Years to Maturity','Mod Duration','Outstanding Amount','Country','ISIN','CUSIP','ID Number'] if z in x]
     srt=x[cols].sort_values(SORT_COL,ascending=SORT_ASC,na_position='last')
+    with st.expander('Yield vs maturity (interactive JS chart)'):
+        render_curve_scatter(x,CTX.curve)
     st.dataframe(srt,hide_index=True,use_container_width=True,column_config={'Mod Duration':st.column_config.NumberColumn(format='%.2f'),'G-Spread (bp)':st.column_config.NumberColumn(format='%.0f')})
     st.download_button('Export filtered bonds',srt.to_csv(index=False).encode(),'credit_screener.csv','text/csv')
 elif page=='Visual Analytics':
