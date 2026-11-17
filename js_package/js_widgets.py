@@ -1,6 +1,6 @@
 """js_widgets.py - small vanilla-JavaScript widgets embedded in the Streamlit app with components.html.
 
-render_curve_scatter(bonds, curve): interactive "YTM vs years to maturity" chart of the filtered bonds with the
+render_curve_scatter(bonds, curve): YTM vs years to maturity chart of the filtered bonds with the
 Treasury curve drawn on top. The chart is drawn client-side in the browser (SVG, no libraries, no Node.js):
 hover a bond for its details, and toggle IG / HY on and off without a Streamlit rerun.
 """
