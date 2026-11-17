@@ -27,7 +27,7 @@ edits = [
     ('p=ROOT/\'data\'/\'sample\'/file', "    p=ROOT/'data'/file\n    if not p.exists(): return pd.DataFrame()",
      "    p=ROOT/'data'/file\n    if not p.exists(): p=ROOT/'data'/'sample'/file\n    if not p.exists(): return pd.DataFrame()"),
     ('render_curve_scatter(x', "    st.dataframe(srt,hide_index=True",
-     "    with st.expander('Yield vs maturity (interactive JS chart)'):\n        render_curve_scatter(x,CTX.curve)\n    st.dataframe(srt,hide_index=True"),
+     "    with st.expander('Yield vs maturity (across maturities)'):\n        render_curve_scatter(x,CTX.curve)\n    st.dataframe(srt,hide_index=True"),
 ]
 for marker, find, repl in edits:
     if marker in src:
